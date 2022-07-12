@@ -2,12 +2,6 @@ package com.princesses;
 
 import com.princesses.model.Princess;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +11,6 @@ import static com.princesses.Util.get;
 import static com.princesses.Util.printPrincessList;
 import static com.princesses.Util.readFile;
 import static com.princesses.Util.updatePrincess;
-import static com.princesses.Util.writePrincessFields;
 
 public class PrincessRunner {
 
@@ -32,51 +25,39 @@ public class PrincessRunner {
                 5. Update princess by id
                 6. Exit program""";
         List<Princess> princesses = readFile();
-        List<Princess> primaryPrincessList = new ArrayList<>();
-        primaryPrincessList.addAll(princesses);
         System.out.println("System ready.");
         System.out.println(operations);
 
         Scanner scanner = new Scanner(System.in);
-        int yourChoice;
+        String yourChoice;
 
         do {
-            yourChoice = scanner.nextInt();
+            yourChoice = scanner.nextLine();
             switch (yourChoice) {
-                case 1 -> {
+                case "list" -> {
                     printPrincessList(princesses);
                     System.out.println(operations);
                 }
-                case 2 -> {
+                case "get" -> {
                     System.out.println("Enter princess id");
                     System.out.println(get(princesses, scanner.nextInt()));
                     System.out.println(operations);
                 }
-                case 3 -> {
-                    addPrincess();
+                case "add" -> {
+                    addPrincess(princesses);
                     System.out.println(operations);
                 }
-                case 4 -> {
+                case "delete" -> {
                     System.out.println("Enter princess id");
                     deletePrincess(princesses, scanner.nextInt());
                     System.out.println(operations);
                 }
-                case 5 -> {
+                case "update" -> {
                     System.out.println("Enter princess id");
                     updatePrincess(princesses, scanner.nextInt());
                     System.out.println(operations);
                 }
-                case 6 -> {
-                    File file = Path.of("src", "resources", "disney-princesses.txt").toFile();
-                    try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file))) {
-                        for (Princess primaryPrincess : primaryPrincessList) {
-                            writePrincessFields(fileWriter, primaryPrincess);
-                        }
-                    } catch (IOException e) {
-                        System.err.println("Unexpected error in updatePrincess() method");
-                    }
-                    System.exit(0);
-                }
+                case "exit" -> System.exit(0);
             }
         } while (true);
     }

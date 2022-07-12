@@ -4,9 +4,7 @@ import com.princesses.model.EyeColor;
 import com.princesses.model.HairColor;
 import com.princesses.model.Princess;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -37,15 +35,6 @@ public class Util {
         return princessList;
     }
 
-    private static void writeFile(Princess princess) {
-        try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file, true))) {
-            writePrincessFields(fileWriter, princess);
-
-        } catch (IOException e) {
-            System.err.println("Unexpected error in writeFile() method");
-        }
-    }
-
     public static void printPrincessList(List<Princess> princesses) {
         princesses.forEach(System.out::println);
     }
@@ -59,7 +48,7 @@ public class Util {
         return new Princess();
     }
 
-    public static boolean addPrincess() {
+    public static boolean addPrincess(List<Princess> princesses) {
         Scanner scanner = new Scanner(System.in);
         Princess princess = new Princess();
         System.out.println("Enter princess name:");
@@ -83,24 +72,15 @@ public class Util {
         setHairColor(scanner, princess);
         System.out.println("Choose eye color and print a number:\n1. Brown\n2. Blue\n3. Violet\n4. Hazel");
         setEyeColor(scanner, princess);
-        int beforeWriting = readFile().size();
-        writeFile(princess);
-        int afterWriting = readFile().size();
+        int beforeWriting = princesses.size();
+        princesses.add(princess);
+        int afterWriting = princesses.size();
 
         return afterWriting > beforeWriting;
     }
 
     public static boolean deletePrincess(List<Princess> princesses, int id) {
-        boolean isDeleted = princesses.removeIf(princess -> princess.getId() == id);
-        try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file))) {
-
-            for (Princess princess : princesses) {
-                writePrincessFields(fileWriter, princess);
-            }
-        } catch (IOException e) {
-            System.err.println("Unexpected error in deletePrincess() method");
-        }
-        return isDeleted;
+        return princesses.removeIf(princess -> princess.getId() == id);
     }
 
     public static void updatePrincess(List<Princess> princesses, int id) {
@@ -130,13 +110,6 @@ public class Util {
             }
 
         }
-        try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file))) {
-            for (Princess princess : princesses) {
-                writePrincessFields(fileWriter, princess);
-            }
-        } catch (IOException e) {
-            System.err.println("Unexpected error in updatePrincess() method");
-        }
     }
 
     private static void setEyeColor(Scanner scanner, Princess princess) {
@@ -157,14 +130,5 @@ public class Util {
             case 5 -> princess.setHairColor(HairColor.RED);
             case 6 -> princess.setHairColor(HairColor.BROWN);
         }
-    }
-
-    public static void writePrincessFields(BufferedWriter fileWriter, Princess princess) throws IOException {
-        fileWriter.write(String.valueOf(princess.getId()).concat(" | "));
-        fileWriter.write(princess.getName().concat(" | "));
-        fileWriter.write(String.valueOf(princess.getAge()).concat(" | "));
-        fileWriter.write(princess.getHairColor().getHairColorFromEnum().concat(" | "));
-        fileWriter.write(princess.getEyeColor().getEyeColorFromEnum());
-        fileWriter.newLine();
     }
 }
