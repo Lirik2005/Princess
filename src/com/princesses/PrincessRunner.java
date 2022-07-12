@@ -11,6 +11,7 @@ import static com.princesses.Util.get;
 import static com.princesses.Util.printPrincessList;
 import static com.princesses.Util.readFile;
 import static com.princesses.Util.updatePrincess;
+import static java.lang.Integer.parseInt;
 
 public class PrincessRunner {
 
@@ -33,28 +34,27 @@ public class PrincessRunner {
 
         do {
             yourChoice = scanner.nextLine();
-            switch (yourChoice) {
+            String[] fields;
+            fields = yourChoice.split(" ");
+            switch (fields[0]) {
                 case "list" -> {
                     printPrincessList(princesses);
                     System.out.println(operations);
                 }
                 case "get" -> {
-                    System.out.println("Enter princess id");
-                    System.out.println(get(princesses, scanner.nextInt()));
+                    System.out.println(get(princesses, parseInt(fields[1])));
                     System.out.println(operations);
                 }
                 case "add" -> {
-                    addPrincess(princesses);
+                    addPrincess(princesses, fields);
                     System.out.println(operations);
                 }
                 case "delete" -> {
-                    System.out.println("Enter princess id");
-                    deletePrincess(princesses, scanner.nextInt());
+                    deletePrincess(princesses, parseInt(fields[1]));
                     System.out.println(operations);
                 }
                 case "update" -> {
-                    System.out.println("Enter princess id");
-                    updatePrincess(princesses, scanner.nextInt());
+                    updatePrincess(princesses, parseInt(fields[1]), fields);
                     System.out.println(operations);
                 }
                 case "exit" -> System.exit(0);

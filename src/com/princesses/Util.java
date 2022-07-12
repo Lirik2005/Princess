@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static java.lang.Integer.parseInt;
+
 public class Util {
 
     private static final File file = Path.of("src", "resources", "disney-princesses.txt").toFile();
@@ -22,9 +24,9 @@ public class Util {
             while (scanner.hasNext()) {
                 Princess princess = new Princess();
                 String[] split = scanner.nextLine().replace(" | ", ",").split(",");
-                princess.setId(Integer.parseInt(split[0]));
+                princess.setId(parseInt(split[0]));
                 princess.setName(split[1]);
-                princess.setAge(Integer.parseInt(split[2]));
+                princess.setAge(parseInt(split[2]));
                 princess.setHairColor(HairColor.valueOf(split[3].toUpperCase()));
                 princess.setEyeColor(EyeColor.valueOf(split[4].toUpperCase()));
                 princessList.add(princess);
@@ -48,30 +50,17 @@ public class Util {
         return new Princess();
     }
 
-    public static boolean addPrincess(List<Princess> princesses) {
-        Scanner scanner = new Scanner(System.in);
+    public static boolean addPrincess(List<Princess> princesses, String[] fields) {
         Princess princess = new Princess();
-        System.out.println("Enter princess name:");
-        princess.setName(scanner.nextLine());
-        System.out.println("Enter princess id:");
-        princess.setId(scanner.nextInt());
+        princess.setName(fields[2]);
+        princess.setId(parseInt(fields[1]));
         int age;
         do {
-            System.out.println("Enter princess age between 0 and 99 years:");
-            age = scanner.nextInt();
+            age = parseInt(fields[3]);
             princess.setAge(age);
         } while (age <= 0 || age > 99);
-        System.out.println("""
-                                   Choose hair color and print a number:
-                                   1. Black
-                                   2. Blonde
-                                   3. Platinum-blonde
-                                   4. Strawberry-blonde
-                                   5. Red
-                                   6. Brown""");
-        setHairColor(scanner, princess);
-        System.out.println("Choose eye color and print a number:\n1. Brown\n2. Blue\n3. Violet\n4. Hazel");
-        setEyeColor(scanner, princess);
+        setHairColor(princess, fields);
+        setEyeColor(princess, fields);
         int beforeWriting = princesses.size();
         princesses.add(princess);
         int afterWriting = princesses.size();
@@ -83,52 +72,40 @@ public class Util {
         return princesses.removeIf(princess -> princess.getId() == id);
     }
 
-    public static void updatePrincess(List<Princess> princesses, int id) {
-        Scanner scanner = new Scanner(System.in);
+    public static void updatePrincess(List<Princess> princesses, int id, String[] fields) {
         for (Princess princess : princesses) {
             int a = princess.getId();
             if (a == id) {
-                System.out.println("Enter new princess name:");
-                Objects.requireNonNull(princess).setName(scanner.nextLine());
+                Objects.requireNonNull(princess).setName(fields[2]);
                 int age;
                 do {
-                    System.out.println("Enter new princess age between 0 and 99 years:");
-                    age = scanner.nextInt();
+                    age = parseInt(fields[3]);
                     princess.setAge(age);
                 } while (age <= 0 || age > 99);
-                System.out.println("""
-                                           Choose new hair color and print a number:
-                                           1. Black
-                                           2. Blonde
-                                           3. Platinum-blonde
-                                           4. Strawberry-blonde
-                                           5. Red
-                                           6. Brown""");
-                setHairColor(scanner, princess);
-                System.out.println("Choose new eye color and print a number:\n1. Brown\n2. Blue\n3. Violet\n4. Hazel");
-                setEyeColor(scanner, princess);
+                setHairColor(princess, fields);
+                setEyeColor(princess, fields);
             }
 
         }
     }
 
-    private static void setEyeColor(Scanner scanner, Princess princess) {
-        switch (scanner.nextInt()) {
-            case 1 -> princess.setEyeColor(EyeColor.BROWN);
-            case 2 -> princess.setEyeColor(EyeColor.BLUE);
-            case 3 -> princess.setEyeColor(EyeColor.VIOLET);
-            case 4 -> princess.setEyeColor(EyeColor.HAZEL);
+    private static void setEyeColor(Princess princess, String[] fields) {
+        switch (fields[5]) {
+            case "brown" -> princess.setEyeColor(EyeColor.BROWN);
+            case "blue" -> princess.setEyeColor(EyeColor.BLUE);
+            case "violet" -> princess.setEyeColor(EyeColor.VIOLET);
+            case "hazel" -> princess.setEyeColor(EyeColor.HAZEL);
         }
     }
 
-    private static void setHairColor(Scanner scanner, Princess princess) {
-        switch (scanner.nextInt()) {
-            case 1 -> princess.setHairColor(HairColor.BLACK);
-            case 2 -> princess.setHairColor(HairColor.BLONDE);
-            case 3 -> princess.setHairColor(HairColor.PLATINUM_BLONDE);
-            case 4 -> princess.setHairColor(HairColor.STRAWBERRY_BLONDE);
-            case 5 -> princess.setHairColor(HairColor.RED);
-            case 6 -> princess.setHairColor(HairColor.BROWN);
+    private static void setHairColor(Princess princess, String[] fields) {
+        switch (fields[4]) {
+            case "black" -> princess.setHairColor(HairColor.BLACK);
+            case "blonde" -> princess.setHairColor(HairColor.BLONDE);
+            case "platinum-blonde" -> princess.setHairColor(HairColor.PLATINUM_BLONDE);
+            case "strawberry-blonde" -> princess.setHairColor(HairColor.STRAWBERRY_BLONDE);
+            case "red" -> princess.setHairColor(HairColor.RED);
+            case "brown" -> princess.setHairColor(HairColor.BROWN);
         }
     }
 }
