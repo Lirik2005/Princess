@@ -54,11 +54,12 @@ public class Util {
         Princess princess = new Princess();
         princess.setName(fields[2]);
         princess.setId(parseInt(fields[1]));
-        int age;
-        do {
-            age = parseInt(fields[3]);
-            princess.setAge(age);
-        } while (age <= 0 || age > 99);
+        if (parseInt(fields[3]) <= 99 && parseInt(fields[3]) > 0) {
+            princess.setAge(parseInt(fields[3]));
+        } else {
+            System.err.println("Age should be between 0 and 99 years");
+            return false;
+        }
         setHairColor(princess, fields);
         setEyeColor(princess, fields);
         int beforeWriting = princesses.size();
@@ -77,20 +78,21 @@ public class Util {
             int a = princess.getId();
             if (a == id) {
                 Objects.requireNonNull(princess).setName(fields[2]);
-                int age;
-                do {
-                    age = parseInt(fields[3]);
-                    princess.setAge(age);
-                } while (age <= 0 || age > 99);
+                if (parseInt(fields[3]) <= 99 && parseInt(fields[3]) > 0) {
+                    princess.setAge(parseInt(fields[3]));
+                } else {
+                    System.err.println("Age should be between 0 and 99 years");
+                    break;
+                }
+                princess.setAge(parseInt(fields[3]));
                 setHairColor(princess, fields);
                 setEyeColor(princess, fields);
             }
-
         }
     }
 
     private static void setEyeColor(Princess princess, String[] fields) {
-        switch (fields[5]) {
+        switch (fields[5].toLowerCase()) {
             case "brown" -> princess.setEyeColor(EyeColor.BROWN);
             case "blue" -> princess.setEyeColor(EyeColor.BLUE);
             case "violet" -> princess.setEyeColor(EyeColor.VIOLET);
@@ -99,7 +101,7 @@ public class Util {
     }
 
     private static void setHairColor(Princess princess, String[] fields) {
-        switch (fields[4]) {
+        switch (fields[4].toLowerCase()) {
             case "black" -> princess.setHairColor(HairColor.BLACK);
             case "blonde" -> princess.setHairColor(HairColor.BLONDE);
             case "platinum-blonde" -> princess.setHairColor(HairColor.PLATINUM_BLONDE);

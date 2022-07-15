@@ -36,7 +36,7 @@ public class PrincessRunner {
             yourChoice = scanner.nextLine();
             String[] fields;
             fields = yourChoice.split(" ");
-            switch (fields[0]) {
+            switch (fields[0].toLowerCase()) {
                 case "list" -> {
                     printPrincessList(princesses);
                     System.out.println(operations);

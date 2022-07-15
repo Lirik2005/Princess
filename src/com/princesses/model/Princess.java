@@ -5,15 +5,11 @@ import static java.lang.String.format;
 public class Princess {
 
     private Integer id;
-
     private String name;
-
     private Integer age;
-
     private HairColor hairColor;
-
     private EyeColor eyeColor;
-
+    
     public Princess() {
     }
 
