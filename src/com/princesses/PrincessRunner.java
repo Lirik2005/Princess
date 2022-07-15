@@ -42,19 +42,30 @@ public class PrincessRunner {
                     System.out.println(operations);
                 }
                 case "get" -> {
-                    System.out.println(get(princesses, parseInt(fields[1])));
-                    System.out.println(operations);
+                    try {
+                        System.out.println(get(princesses, parseInt(fields[1])));
+                    } catch (Exception e) {
+                        System.err.println("There is no such princess");
+                    } finally {
+                        System.out.println(operations);
+                    }
                 }
                 case "add" -> {
                     addPrincess(princesses, fields);
                     System.out.println(operations);
                 }
                 case "delete" -> {
-                    deletePrincess(princesses, parseInt(fields[1]));
+                    if (!deletePrincess(princesses, parseInt(fields[1]))) {
+                        System.err.println("There is no such princess");
+                    }
                     System.out.println(operations);
                 }
                 case "update" -> {
-                    updatePrincess(princesses, parseInt(fields[1]), fields);
+                    if (princesses.stream().map(Princess::getId).anyMatch(id -> id == parseInt(fields[1]))) {
+                        updatePrincess(princesses, parseInt(fields[1]), fields);
+                    } else {
+                        System.err.println("There is no such princess");
+                    }
                     System.out.println(operations);
                 }
                 case "exit" -> System.exit(0);
